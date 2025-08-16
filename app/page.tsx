@@ -139,6 +139,14 @@ const stories: Story[] = [
     id: "video",
     type: "video",
     duration: 6000,
+=======
+const stories: Story[] = [
+  {
+    id: "video",
+    type: "youtube",
+    videoId: "jpN0G5AmH9Q",
+    duration: 6000,
+>>>>>>> 415a83f11a3f3402294508ecf86d09b5847f81fb
     title: "¡Bienvenido!",
   },
   {
@@ -474,102 +482,3 @@ export default function RetroLinkTree() {
     </div>
   )
 }
-
-// En el array de stories, actualizar el primer elemento:
-const stories: Story[] = [
-  {
-    id: "video",
-    type: "video",
-    duration: 6000,
-    title: "¡Bienvenido!",
-  },
-  {
-    id: "tiktok",
-    type: "social",
-    platform: "TikTok",
-    username: "@puertajada",
-    url: "https://tiktok.com/@puertajada",
-    color: "from-black to-gray-800",
-    icon: "TikTok",
-    duration: 5000,
-  },
-  {
-    id: "youtube",
-    type: "social",
-    platform: "YouTube",
-    username: "Puertajada",
-    url: "https://youtube.com/@puertajada",
-    color: "from-red-600 to-red-800",
-    icon: "YouTube",
-    duration: 5000,
-  },
-  {
-    id: "instagram",
-    type: "social",
-    platform: "Instagram",
-    username: "@puertajada",
-    url: "https://instagram.com/puertajada",
-    color: "from-purple-600 via-pink-600 to-orange-500",
-    icon: "Instagram",
-    duration: 5000,
-  },
-  {
-    id: "twitter",
-    type: "social",
-    platform: "Twitter",
-    username: "@puertajada",
-    url: "https://twitter.com/puertajada",
-    color: "from-gray-900 to-blue-600",
-    icon: "Twitter",
-    duration: 5000,
-  },
-  {
-    id: "facebook",
-    type: "social",
-    platform: "Facebook",
-    username: "Puertajada",
-    url: "https://facebook.com/puertajada",
-    color: "from-blue-600 to-blue-800",
-    icon: "Facebook",
-    duration: 5000,
-  },
-]
-
-// En el renderizado del contenido de la story:
-{currentStoryData.type === "video" ? (
-  <div className="relative w-full h-full bg-black">
-    <div className="absolute inset-0 z-10 flex items-center justify-center h-full">
-      <LocalVideoPlayer onVideoEnd={nextStory} />
-    </div>
-  </div>
-) : currentStoryData.type === "social" ? (
-  <div className="relative w-full h-full bg-black">
-    <div className="absolute inset-0 z-10 flex items-center justify-center h-full">
-      <YouTubeEmbed videoId={(currentStoryData as YouTubeStory).videoId} />
-    </div>
-  </div>
-) : (
-  <div className={`relative w-full h-full bg-gradient-to-br ${currentStoryData.color}`}>
-    <div className="absolute inset-0 bg-black/10" />
-    <div className="relative z-10 flex flex-col items-center justify-center h-full text-center p-8">
-      <SocialIcon platform={currentStoryData.platform} />
-      <h2 className="text-white text-3xl mb-2 pixel-font drop-shadow-lg">{currentStoryData.platform}</h2>
-      <p className="text-white/90 text-lg mb-8 pixel-font">{currentStoryData.username}</p>
-      <a
-        href={currentStoryData.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-white text-black px-8 py-4 rounded-full pixel-font text-sm font-bold hover:bg-gray-200 transition-all duration-300 transform hover:scale-105 shadow-lg"
-        onClick={(e) => e.stopPropagation()}
-      >
-        SEGUIR
-      </a>
-
-      {/* Decorative elements */}
-      <div className="absolute top-8 left-8 text-white/30 text-2xl animate-spin">⚡</div>
-      <div className="absolute bottom-8 right-8 text-white/30 text-2xl animate-ping">✨</div>
-      <div className="absolute top-1/4 right-8 text-white/20 text-xl animate-pulse">🎮</div>
-      <div className="absolute bottom-1/4 left-8 text-white/20 text-xl animate-bounce">🎯</div>
-    </div>
-  </div>
-)}
