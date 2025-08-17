@@ -60,12 +60,9 @@ export const metadata: Metadata = {
     images: ["/icon.jpg"],
   },
   icons: {
-    icon: [
-      { url: "/icon.jpg", sizes: "32x32", type: "image/jpeg" },
-      { url: "/icon.jpg", sizes: "16x16", type: "image/jpeg" },
-    ],
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: [{ url: "/icon.jpg", sizes: "180x180", type: "image/jpeg" }],
-    shortcut: "/icon.jpg",
   },
   manifest: "/manifest.json",
   appleWebApp: {
