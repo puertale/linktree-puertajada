@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -60,79 +60,7 @@ interface SocialStory {
 
 type Story = YouTubeStory | VideoStory | SocialStory;
 
-// Nuevo componente para video local con fullscreen
-const LocalVideoPlayer = ({ onVideoEnd }: { onVideoEnd?: () => void }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleFullscreen = async () => {
-    if (!videoRef.current) return;
-    
-    try {
-      if (!document.fullscreenElement) {
-        await videoRef.current.requestFullscreen();
-        setIsFullscreen(true);
-      } else {
-        await document.exitFullscreen();
-        setIsFullscreen(false);
-      }
-    } catch (error) {
-      console.log('Fullscreen not supported');
-    }
-  };
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  }, []);
-
-  return (
-    <div className="relative w-full h-full bg-black rounded-xl overflow-hidden">
-      <video
-        ref={videoRef}
-        className="w-full h-full object-cover cursor-pointer"
-        autoPlay
-        muted
-        loop
-        playsInline
-        onClick={toggleFullscreen}
-        onEnded={onVideoEnd}
-      >
-        <source src="/video.mp4" type="video/mp4" />
-        Tu navegador no soporta el elemento video.
-      </video>
-      
-      {/* Botón fullscreen overlay */}
-      <div className="absolute top-4 right-4 z-10">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-white hover:bg-white/20 bg-black/30"
-          onClick={toggleFullscreen}
-        >
-          {isFullscreen ? (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 3h4v2H5v2H3V3zm10 0h4v4h-2V5h-2V3zM3 13v4h4v-2H5v-2H3zm14 0v2h-2v2h-4v-2h2v-2h4z"/>
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M3 3v4h2V5h2V3H3zm12 0v2h2v2h2V3h-4zM5 15H3v4h4v-2H5v-2zm10 0v2h2v2h4v-4h-4z"/>
-            </svg>
-          )}
-        </Button>
-      </div>
-      
-      {/* Indicador de click para fullscreen */}
-      <div className="absolute bottom-4 left-4 text-white/70 text-xs bg-black/50 px-2 py-1 rounded">
-        Click para pantalla completa
-      </div>
-    </div>
-  );
-};
+// Componente de video local eliminado por no utilizarse actualmente
 
 const stories: Story[] = [
   {
@@ -236,8 +164,17 @@ export default function RetroLinkTree() {
   const [currentStory, setCurrentStory] = useState(0)
   const [progress, setProgress] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const nextStory = useCallback(() => {
+    setCurrentStory((prev) => (prev < stories.length - 1 ? prev + 1 : 0))
+    setProgress(0)
+  }, [])
+
+  const prevStory = useCallback(() => {
+    setCurrentStory((prev) => (prev > 0 ? prev - 1 : prev))
+    setProgress(0)
+  }, [])
 
   useEffect(() => {
     if (isPaused) return
@@ -260,24 +197,9 @@ export default function RetroLinkTree() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [currentStory, isPaused, stories])
+  }, [currentStory, isPaused, nextStory])
 
-  const nextStory = () => {
-    if (currentStory < stories.length - 1) {
-      setCurrentStory((prev) => prev + 1)
-      setProgress(0)
-    } else {
-      setCurrentStory(0)
-      setProgress(0)
-    }
-  }
-
-  const prevStory = () => {
-    if (currentStory > 0) {
-      setCurrentStory((prev) => prev - 1)
-      setProgress(0)
-    }
-  }
+  // nextStory y prevStory se definen arriba con useCallback
 
   const handleStoryClick = (index: number) => {
     setCurrentStory(index)
@@ -285,14 +207,7 @@ export default function RetroLinkTree() {
   }
 
   const togglePlayPause = () => {
-    setIsPaused(!isPaused)
-    if (videoRef.current) {
-      if (isPaused) {
-        videoRef.current.play()
-      } else {
-        videoRef.current.pause()
-      }
-    }
+    setIsPaused((prev) => !prev)
   }
 
   const currentStoryData = stories[currentStory]
