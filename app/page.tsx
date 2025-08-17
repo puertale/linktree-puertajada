@@ -137,16 +137,9 @@ const LocalVideoPlayer = ({ onVideoEnd }: { onVideoEnd?: () => void }) => {
 const stories: Story[] = [
   {
     id: "video",
-    type: "video",
-    duration: 6000,
-=======
-const stories: Story[] = [
-  {
-    id: "video",
     type: "youtube",
     videoId: "jpN0G5AmH9Q",
     duration: 6000,
->>>>>>> 415a83f11a3f3402294508ecf86d09b5847f81fb
     title: "¡Bienvenido!",
   },
   {
